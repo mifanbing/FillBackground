@@ -121,42 +121,65 @@ class Util:
         width = box1.width
         height = box1.height
         
-        averageDiff = 0
+        averageDiff = 0.0
         offest = 2
+        
         if neighbourType == NeighbourType.LEFT:
+            #print("----")
             # compare neighbour right column with box1 left column
-            for h in range(height):
-                for w in range(offest):
-                    color1 = image1[h, w]
-                    color2 = neighbourImage[h, width - 1 - w]
-                    sum1 = np.int16(color1[0]) + np.int16(color1[1]) + np.int16(color1[2])
-                    sum2 = np.int16(color2[0]) + np.int16(color2[1]) + np.int16(color2[2])
-                    averageDiff += abs(sum1 - sum2) / height
+            for w in range(offest):
+                #diff = abs(image1[:, w] - neighbourImage[:, width - 1 - w])
+                thing1 = np.array(image1[:, w], dtype=np.int16)
+                thing2 = np.array(neighbourImage[:, width - 1 - w], dtype=np.int16)
+                diff = np.array(abs(thing1 - thing2), dtype=np.int16)
+                averageDiff += np.average(diff, (0, 1))
+                #print("1 -- w: %d, average: %d" % (w, averageDiff))
+            
         elif neighbourType == NeighbourType.RIGHT:
-            for h in range(height):
-                for w in range(offest):
-                    color1 = image1[h, width - 1 - w]
-                    color2 = neighbourImage[h, w]
-                    sum1 = np.int16(color1[0]) + np.int16(color1[1]) + np.int16(color1[2])
-                    sum2 = np.int16(color2[0]) + np.int16(color2[1]) + np.int16(color2[2])
-                    averageDiff += abs(sum1 - sum2) / height
+            for w in range(offest):
+                thing1 = np.array(image1[:, width - 1 - w], dtype=np.int16)
+                thing2 = np.array(neighbourImage[:, w], dtype=np.int16)
+                diff = np.array(abs(thing1 - thing2), dtype=np.int16)
+                
+                averageDiff += np.average(diff, (0, 1))
+                
+            # for h in range(height):
+            #     for w in range(offest):
+            #         color1 = image1[h, width - 1 - w]
+            #         color2 = neighbourImage[h, w]
+            #         sum1 = np.int16(color1[0]) + np.int16(color1[1]) + np.int16(color1[2])
+            #         sum2 = np.int16(color2[0]) + np.int16(color2[1]) + np.int16(color2[2])
+            #         averageDiff += abs(sum1 - sum2) / height
         elif neighbourType == NeighbourType.ABOVE:
             # compare neighbour bottom row with box1 top row
-             for w in range(width):
-                 for h in range(offest):
-                     color1 = image1[h, w]
-                     color2 = neighbourImage[height - 1 - h, w]
-                     sum1 = np.int16(color1[0]) + np.int16(color1[1]) + np.int16(color1[2])
-                     sum2 = np.int16(color2[0]) + np.int16(color2[1]) + np.int16(color2[2])
-                     averageDiff += abs(sum1 - sum2) / width 
+            for h in range(offest):
+                thing1 = np.array(image1[h, :], dtype=np.int16)
+                thing2 = np.array(neighbourImage[height - 1 - h, :], dtype=np.int16)
+                diff = np.array(abs(thing1 - thing2), dtype=np.int16)
+                averageDiff += np.average(diff, (0, 1))
+                
+             # for w in range(width):
+             #     for h in range(offest):
+             #         color1 = image1[h, w]
+             #         color2 = neighbourImage[height - 1 - h, w]
+             #         sum1 = np.int16(color1[0]) + np.int16(color1[1]) + np.int16(color1[2])
+             #         sum2 = np.int16(color2[0]) + np.int16(color2[1]) + np.int16(color2[2])
+             #         averageDiff += abs(sum1 - sum2) / width 
         elif neighbourType == NeighbourType.UNDER:
-            for w in range(width):
-                for h in range(offest):
-                    color1 = image1[height - 1 - h, w]
-                    color2 = neighbourImage[h, w]
-                    sum1 = np.int16(color1[0]) + np.int16(color1[1]) + np.int16(color1[2])
-                    sum2 = np.int16(color2[0]) + np.int16(color2[1]) + np.int16(color2[2])
-                    averageDiff += abs(sum1 - sum2) / width 
+            for h in range(offest):
+                thing1 = np.array(image1[height - 1 - h, :], dtype=np.int16)
+                thing2 = np.array(neighbourImage[h, :], dtype=np.int16)
+                diff = np.array(abs(thing1 - thing2), dtype=np.int16)
+                
+                averageDiff += np.average(diff, (0, 1))
+                
+            # for w in range(width):
+            #     for h in range(offest):
+            #         color1 = image1[height - 1 - h, w]
+            #         color2 = neighbourImage[h, w]
+            #         sum1 = np.int16(color1[0]) + np.int16(color1[1]) + np.int16(color1[2])
+            #         sum2 = np.int16(color2[0]) + np.int16(color2[1]) + np.int16(color2[2])
+            #         averageDiff += abs(sum1 - sum2) / width 
                 
         return averageDiff
     
@@ -219,8 +242,8 @@ class Util:
         return averageDiff
     
     def getFineBoxesWithoutTim(self, boxesContainTim):
-        wFineStride = 2 # int(self.wStride / 6)
-        hFineStride = 2 # int(self.hStride / 6)
+        wFineStride = 8 # int(self.wStride / 6)
+        hFineStride = 8 # int(self.hStride / 6)
         traversedBoxes = []
         #traversedImages = []
         
