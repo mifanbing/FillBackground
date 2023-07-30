@@ -85,9 +85,9 @@ while len(boxesContainTim) > 0:
     #break
 
 
-
-cv2.imshow('', inputImage)
-cv2.waitKey(0)
+cv2.imwrite("resultV2.jpeg", inputImage)
+# cv2.imshow('', inputImage)
+# cv2.waitKey(0)
 
 
 
