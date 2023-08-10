@@ -218,8 +218,8 @@ class Util:
         return False
     
     def getFineBoxesWithoutTim(self, boxesContainTim):
-        wFineStride = 8 # int(self.wStride / 6)
-        hFineStride = 8 # int(self.hStride / 6)
+        wFineStride = 4 # int(self.wStride / 6)
+        hFineStride = 4 # int(self.hStride / 6)
         traversedBoxes = []
         #traversedImages = []
         

@@ -46,21 +46,32 @@ for index in indicesContainTim:
 fineBoxesWithoutTim = util.getFineBoxesWithoutTim(boxesContainTim)
 #drawBox(fineBoxesWithoutTim[1], (255, 0, 0))
 
+
 while len(boxesContainTim) > 0:
     print(len(boxesContainTim))
     nextIterationBoxes = []
+    processedTimBoxes = []
+    
     for boxTim in boxesContainTim:
         neighbourBoxes = util.neighbourBox(boxTim)
         neighbourAndNotTimBoxes = []
         
+        shouldSkip = False
         for neighbourBox in neighbourBoxes:
             if not neighbourBox.box in boxesContainTim:
                 neighbourAndNotTimBoxes.append(neighbourBox)
                 #drawBox(neighbourBox.box, (255, 0, 0))
+            if neighbourBox.box in processedTimBoxes:
+                shouldSkip = True
+        if shouldSkip:
+            nextIterationBoxes.append(boxTim)
+            continue
         
         if len(neighbourAndNotTimBoxes) <= 1 :
             nextIterationBoxes.append(boxTim)
         else:
+            processedTimBoxes.append(boxTim)
+            
             width = boxTim.width
             height = boxTim.height
             w0 = boxTim.wUpperLeft
